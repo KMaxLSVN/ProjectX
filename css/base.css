@@ -126,3 +126,9 @@
     animation-duration: 777ms;
     animation-iteration-count: infinite;
     animation-timing-function: linear; }
+
+.serverMes {
+  display: none;
+  color: red; }
+
+/*# sourceMappingURL=base.css.map */
