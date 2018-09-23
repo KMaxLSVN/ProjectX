@@ -34,12 +34,11 @@
   flex-direction: row;
   justify-content: space-between; }
   .company__title i {
-    font-size: 1.5em; }
-
-.carousel .carousel-indicators__point {
-  border-radius: 50%;
-  height: 10px;
-  width: 10px; }
+    font-size: 1.5em;
+    opacity: .8; }
+    .company__title i:hover {
+      cursor: pointer;
+      opacity: 1; }
 
 .company-partners {
   display: flex;
@@ -93,6 +92,12 @@
   height: 100%;
   margin: 0 auto; }
 
+.chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; }
+
 .carousel.slide {
   height: 100%; }
 
@@ -130,5 +135,31 @@
 .serverMes {
   display: none;
   color: red; }
+
+.hide {
+  display: none; }
+
+.all-partners-list .company__content-scroll {
+  max-height: calc(100% - 21px); }
+
+.carousel .carousel-indicators {
+  bottom: 0;
+  margin-bottom: 0; }
+  .carousel .carousel-indicators__point {
+    border-radius: 50%;
+    height: 15px;
+    width: 15px; }
+.carousel .carousel-inner .carousel-item .row:first-child {
+  height: 180px; }
+.carousel .carousel-inner .carousel-item .dataImg {
+  height: 100%;
+  width: 100%; }
+  .carousel .carousel-inner .carousel-item .dataImg img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%; }
+.carousel .carousel-inner .carousel-item .text {
+  max-height: calc(100% - 24px);
+  overflow: hidden; }
 
 /*# sourceMappingURL=base.css.map */
