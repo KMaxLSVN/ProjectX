@@ -5,6 +5,7 @@ $(function () {
         url: "http://codeit.pro/codeitCandidates/serverFrontendTest/company/getList",
         success: function(msg){
             console.log(msg);
+    //-----Loaders-----
             $('.company-data .loader').hide();
     //-----Rendering-----
             $('.company__total span').text(msg.list.length);
@@ -15,6 +16,45 @@ $(function () {
         //-----Initialization  data chart-----
             initChart(countryData(msg.list));
         }
+    });
+    //-----Sorting numbers-----
+    $('.company__title .fa-space-shuttle, .company__title .fa-universal-access').on('click', function () {
+        // let partnersArr= $('.all-company-list li.active').data('partners');
+        // if($(this).hasClass('sort-icon')){
+        //     $(this).removeClass('sort-icon');
+        //     partnersArr = sortArray(partnersArr, 'number', 'value', true);
+        //     renderingPartners(partnersArr);
+        //     $(this).data('sortType', true);
+        // } else {
+        //     $(this).addClass('sort-icon');
+        //     partnersArr = sortArray(partnersArr, 'number', 'value', false);
+        //     renderingPartners(partnersArr);
+        //     $(this).data('sortType', false);
+        // }
+        let elem = $(this);
+        console.log(elem);
+        let state = elem.hasClass('sort-icon');
+        let sortArrayOption = {
+            array: $('.all-company-list li.active').data('partners'),
+            type: elem.data('type'),
+            property: elem.data('property'),
+            state: state
+        };
+        renderingPartners(sortArray(sortArrayOption.array, sortArrayOption.type, sortArrayOption.property, sortArrayOption.state));
+        elem.data('sortType', state);
+        elem[state ? 'removeClass' : 'addClass' ]('sort-icon');
+    });
+//-----Company partners-----
+    $('.company-data .company__content-scroll').on('click', 'li', function (e) {
+        $(e.target).addClass('active').siblings().removeClass('active');
+        $('.wrapCompanyPartners').show(1500);
+        let partners = $(e.target).data('partners');
+        //---fn Sorting---
+        let sortState = $('.company__title .fa-space-shuttle').data('sortType');
+        let flag = sortState === undefined ? true : sortState ;
+        partners = sortArray(partners, 'number', 'value', flag);
+        console.log(flag);
+        renderingPartners(partners);
     });
 //=======Getting NEWS data=======
     $.ajax({
@@ -60,21 +100,18 @@ $(function () {
 
         }
     });
-//-----Company partners-----
-    $('.company-data .company__content-scroll').on('click', 'li', function (e) {
-        $(e.target).addClass('active').siblings().removeClass('active');
-        $('.wrapCompanyPartners').show(1500);
-        let partners = $(e.target).data('partners');
-        let listCompanyPartners = '';
-        for (let i=0; i<partners.length; i++){
-            listCompanyPartners += `<div class="company-partners__item">
-                                            <div class="company-partners__percent"><span>${partners[i].value}</span></div>
-                                            <div class="company-partners__name"><span>${partners[i].name}</span></div>
-                                    </div>`;
-        }
-        $('.company-partners').html(listCompanyPartners);
-    });
 });
+//-----fn renderingPartners-----
+function renderingPartners(array) {
+    let listCompanyPartners = '';
+    for (let i=0; i<array.length; i++){
+        listCompanyPartners += `<div class="company-partners__item">
+                                            <div class="company-partners__percent"><span>${array[i].value}</span></div>
+                                            <div class="company-partners__name"><span>${array[i].name}</span></div>
+                                    </div>`;
+    }
+    $('.company-partners').html(listCompanyPartners);
+}
 //-----fn Initialization ChartJS-----
 function initChart(data) {
     let chartData = {
@@ -197,6 +234,31 @@ function formatText(text) {
     let result = text;
     if(text.length > 121){
         result = `${text.slice(0, 121)}...`;
+    }
+    return result;
+}
+//fn sortNumber
+function sortArray(array, type, property, state) {
+    let sortFn = null;
+    switch(type){
+        case 'number':
+            console.log('number');
+            sortFn = (a, b)=>{
+                return a[property]-b[property];
+            };
+            break;
+        case 'string':
+            console.log('string');
+            sortFn = (a, b)=> {
+                a = a[property].toLowerCase();
+                b = b[property].toLowerCase();
+                return a > b ? -1 : b > a ? 1 : 0;
+            };
+            break;
+    }
+    let result = array.sort(sortFn);
+    if(state){
+        result.reverse();
     }
     return result;
 }
