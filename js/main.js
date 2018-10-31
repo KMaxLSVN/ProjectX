@@ -5,15 +5,15 @@ $(function () {
         url: "http://codeit.pro/codeitCandidates/serverFrontendTest/company/getList",
         success: function(msg){
             console.log(msg);
-    //-----Loaders-----
+            //-----Loaders-----
             $('.company-data .loader').hide();
-    //-----Rendering-----
+            //-----Rendering-----
             $('.company__total span').text(msg.list.length);
 
             renderList(msg.list, '.all-company-list', (elem, data)=>{
                 elem.data({partners: data.partners});
             }, {property: 'name'});
-        //-----Initialization  data chart-----
+            //-----Initialization CHART-----
             initChart(countryData(msg.list));
         }
     });
@@ -57,50 +57,24 @@ $(function () {
         renderingPartners(partners);
     });
 //=======Getting NEWS data=======
+    getNewsList((msg)=>{
+        console.log(msg);
+        //-----Loaders-----
+        $('.news-data .loader').hide();
+        //-----Rendering-----
+        renderListNews(msg.list);
+    });
+});
+//fn getNewsList
+function getNewsList(cb){
     $.ajax({
         type: "GET",
         url: "http://codeit.pro/codeitCandidates/serverFrontendTest/news/getList",
-        success: function(msg){
-            console.log(msg);
-            $('.news-data .loader').hide();
-    //-----Rendering-----
-            function renderListNews() {
-                let listIndicator = '';
-                let sliderItem = '';
-                for (let i=0; i < msg.list.length; i++){
-                    listIndicator += `<li data-target="#carouselExampleIndicators" data-slide-to="${i}" class="carousel-indicators__point"></li>`;
-                    sliderItem += `<div class="carousel-item">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <div class="dataImg"><img src="${msg.list[i].img}"></div>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <div class="title font-weight-bold">Title</div>
-                                                <div class="text">${formatText(msg.list[i].description)}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="font-weight-bold">Author:</div>
-                                            <div class="author-data">${msg.list[i].author}</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="font-weight-bold">Public:</div>
-                                            <div>${formatDate(+msg.list[i].date)}</div>
-                                        </div>
-                                    </div>
-                                </div>`;
-                }
-                $('.carousel-indicators').html(listIndicator);
-                $('.carousel-inner').html(sliderItem);
-                $('.carousel-indicators li:first-child, .carousel-inner .carousel-item:first-child').addClass('active');
-                initSlider();
-            }
-            renderListNews();
-
+        success: function(data){
+            cb(data);
         }
     });
-});
+}
 //-----fn renderingPartners-----
 function renderingPartners(array) {
     let listCompanyPartners = '';
@@ -221,8 +195,41 @@ function toggleVisibility(state) {
     $('.company-location .company-partners-data')[!state ? 'hide' : 'show']('slow');
 }
 //fn Initialization Slider
-function initSlider() {
-    $('#carouselExampleIndicators').carousel();
+// function initSlider() {
+//     $('#carouselExampleIndicators').carousel();
+// }
+//fn renderListNews
+function renderListNews(array) {
+    let listIndicator = '';
+    let sliderItem = '';
+    for (let i=0; i < array.length; i++){
+        listIndicator += `<li data-target="#carouselExampleIndicators" data-slide-to="${i}" class="carousel-indicators__point"></li>`;
+        sliderItem += `<div class="carousel-item">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-5">
+                                                <div class="dataImg"><img src="${array[i].img}"></div>
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="title font-weight-bold">Title</div>
+                                                <div class="text">${formatText(array[i].description)}</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="font-weight-bold">Author:</div>
+                                            <div class="author-data">${array[i].author}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="font-weight-bold">Public:</div>
+                                            <div>${formatDate(+array[i].date)}</div>
+                                        </div>
+                                    </div>
+                                </div>`;
+    }
+    $('.carousel-indicators').html(listIndicator);
+    $('.carousel-inner').html(sliderItem);
+    $('.carousel-indicators li:first-child, .carousel-inner .carousel-item:first-child').addClass('active');
+    initSlider();
 }
 //fn formatDate in News Slider
 function formatDate(date) {
@@ -233,11 +240,11 @@ function formatDate(date) {
 function formatText(text) {
     let result = text;
     if(text.length > 121){
-        result = `${text.slice(0, 121)}...`;
+        result = `${text.slice(0, 121).trim()}...`;
     }
     return result;
 }
-//fn sortNumber
+//fn Sorting
 function sortArray(array, type, property, state) {
     let sortFn = null;
     switch(type){
