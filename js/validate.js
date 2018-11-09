@@ -53,7 +53,7 @@ function send(form) {
     let current = $(form);
     $.ajax({
         type: "POST",
-        url: "http://codeit.pro/codeitCandidates/serverFrontendTest/user/registration",
+        url: "",//http://codeit.pro/codeitCandidates/serverFrontendTest/user/registration
         data: data,
         success: function(msg){
             //alert('Form send');
