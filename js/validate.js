@@ -53,7 +53,8 @@ function send(form) {
     let current = $(form);
     $.ajax({
         type: "POST",
-        url: "",//http://codeit.pro/codeitCandidates/serverFrontendTest/user/registration
+        headers: {"Access-Control-Allow-Origin":"*"},
+        url: "http://codeit.pro/codeitCandidates/serverFrontendTest/user/registration",//
         data: data,
         success: function(msg){
             //alert('Form send');
