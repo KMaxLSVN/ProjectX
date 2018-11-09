@@ -2,8 +2,10 @@ $(function () {
 //=======Getting COMPANY data=======
     $.ajax({
         type: "GET",
-        url: "http://codeit.pro/codeitCandidates/serverFrontendTest/company/getList",
+        //url: "http://codeit.pro/codeitCandidates/serverFrontendTest/company/getList",
+        url: "./data/data.txt",
         success: function(msg){
+            msg = JSON.parse(msg)[0];
             console.log(msg);
             //-----Loaders-----
             $('.company-data .loader').hide();
@@ -11,7 +13,7 @@ $(function () {
             $('.company__total span').text(msg.list.length);
 
             renderList(msg.list, '.all-company-list', (elem, data)=>{
-                elem.data({partners: data.partners});
+                elem.data({partners: (data).partners});
             }, {property: 'name'});
             //-----Initialization CHART-----
             initChart(countryData(msg.list));
@@ -69,9 +71,11 @@ $(function () {
 function getNewsList(cb){
     $.ajax({
         type: "GET",
-        url: "http://codeit.pro/codeitCandidates/serverFrontendTest/news/getList",
+        //url: "http://codeit.pro/codeitCandidates/serverFrontendTest/news/getList",
+        url: "./data/companyList.txt",
         success: function(data){
-            cb(data);
+            console.log(data);
+            cb(JSON.parse(data)[0]);
         }
     });
 }
@@ -229,7 +233,6 @@ function renderListNews(array) {
     $('.carousel-indicators').html(listIndicator);
     $('.carousel-inner').html(sliderItem);
     $('.carousel-indicators li:first-child, .carousel-inner .carousel-item:first-child').addClass('active');
-    initSlider();
 }
 //fn formatDate in News Slider
 function formatDate(date) {
