@@ -53,13 +53,26 @@ function send(form) {
     let current = $(form);
     $.ajax({
         type: "POST",
-        headers: {"Access-Control-Allow-Origin":"*"},
-        url: "http://codeit.pro/codeitCandidates/serverFrontendTest/user/registration",//
+        //url: "http://codeit.pro/codeitCandidates/serverFrontendTest/user/registration",
+        url: "",
         data: data,
         success: function(msg){
             //alert('Form send');
+            // console.log(msg);
+            // if (msg.status === "Form Error" && msg.status === "Error"){
+            //     $('.serverMes').text(msg.message);
+            //     $('.serverMes').show();
+            //     return false;
+            // }
+            // current[0].reset();
+            // $('.is-valid, .is-invalid', current).removeClass('is-valid').removeClass('is-invalid');
+            // window.location.replace("step1-2.html");
+        },
+        complete: function(){
+            //alert('Form send');
+            let msg = {status: "Form Error", message: "User not found"};
             console.log(msg);
-            if (msg.status === "Form Error" && msg.status === "Error"){
+            if (msg.status === "Form Error" && document.getElementById('form-f_name').value !== "User"){
                 $('.serverMes').text(msg.message);
                 $('.serverMes').show();
                 return false;

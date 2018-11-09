@@ -60,7 +60,6 @@ $(function () {
     });
 //=======Getting NEWS data=======
     getNewsList((msg)=>{
-        console.log(msg);
         //-----Loaders-----
         $('.news-data .loader').hide();
         //-----Rendering-----
@@ -74,7 +73,6 @@ function getNewsList(cb){
         //url: "http://codeit.pro/codeitCandidates/serverFrontendTest/news/getList",
         url: "./data/companyList.txt",
         success: function(data){
-            console.log(data);
             cb(JSON.parse(data)[0]);
         }
     });
